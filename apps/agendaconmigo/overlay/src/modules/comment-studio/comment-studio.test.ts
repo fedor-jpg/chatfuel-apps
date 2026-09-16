@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { ModuleClient } from "~api";
+import { getDocMeta, type ModuleClient } from "~api";
 import {
   CommentStudioUnavailable,
   normalizeKeywords,
@@ -156,8 +156,8 @@ function fakeClient(options: { failEnableTimes?: number } = {}) {
   let enableFailures = options.failEnableTimes ?? 0;
   const client = {
     query: async () => ({}),
-    mutate: async (doc: unknown, variables: Record<string, unknown>) => {
-      const name = String((doc as { definitions?: { name?: { value?: string } }[] }).definitions?.[0]?.name?.value ?? "");
+    mutate: async (doc: Parameters<ModuleClient["mutate"]>[0], variables: Record<string, unknown>) => {
+      const name = getDocMeta(doc).name ?? "";
       calls.push({ name, variables });
       if (name === "FuelyAutomationCreate") return { fuelyAutomationCreate: { id: "new-1" } };
       if (name === "FuelyAutomationSetEnabled" && variables.enabled === true && enableFailures > 0) {
