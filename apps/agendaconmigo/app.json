@@ -1,0 +1,52 @@
+{
+  "$schema": "../../app.schema.json",
+  "id": "agendaconmigo",
+  "name": "AgendaConmigo",
+  "tagline": "A salon's whole day on Chatfuel: calendar, clients, Instagram comments answered — under your own name.",
+  "description": "Salon operations on the Chatfuel platform: bookings, clients, a knowledge base, Instagram comment automation and a sign-up for every salon you onboard. Scaffolded into your own repository with a build plan for your coding agent.",
+  "category": "other",
+  "status": "draft",
+  "minWizardVersion": "0.4.0",
+  "modules": [
+    "bookings",
+    "contacts",
+    "knowledge-base",
+    "automations",
+    "channels",
+    "auth",
+    "admin"
+  ],
+  "brand": {
+    "appName": "AgendaConmigo",
+    "logo": "listing/icon.png"
+  },
+  "playbook": "playbook.md",
+  "listing": {
+    "icon": "listing/icon.png",
+    "screenshots": [
+      {
+        "file": "listing/screenshots/01-agenda.png",
+        "alt": "Placeholder — replaced by the real agenda screenshot before publishing"
+      }
+    ],
+    "keywords": [
+      "salon",
+      "beauty",
+      "bookings",
+      "instagram",
+      "comments",
+      "spanish",
+      "latam"
+    ],
+    "provides": [
+      {
+        "name": "Salon onboarding",
+        "description": "Services, hours and staff entered once, in Spanish, English or Portuguese — straight into Bookings and the Knowledge Base."
+      },
+      {
+        "name": "Comment Studio",
+        "description": "Fixed keyword replies to Instagram comments with a first Direct message — no AI, no usage cost — with ready texts per language."
+      }
+    ]
+  }
+}
