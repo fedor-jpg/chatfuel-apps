@@ -9,8 +9,8 @@
 // the bot is `commentStudioActivation` below, which always produces the lite
 // shape. There is no option in this type that could turn AI on.
 
-import type { FuelyAutomation } from "../../chatfuel/fuely";
-import { FUELY_LIMITS } from "../../chatfuel/fuely";
+import type { FuelyAutomation } from "./lib/fuely";
+import { FUELY_LIMITS } from "./lib/fuely";
 import type { AppLanguage } from "./lib/language";
 import { baseOf, settingOf } from "./data";
 import { keywordRuleOf, readMode, type ModeOptions } from "./modes";

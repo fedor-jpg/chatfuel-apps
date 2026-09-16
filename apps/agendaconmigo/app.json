@@ -3,8 +3,8 @@
   "id": "agendaconmigo",
   "name": "AgendaConmigo",
   "tagline": "A salon's whole day on Chatfuel: calendar, clients, Instagram comments answered — under your own name.",
-  "description": "Salon operations on the Chatfuel platform: bookings, clients, a knowledge base, Instagram comment automation and a sign-up for every salon you onboard. Scaffolded into your own repository with a build plan for your coding agent.",
-  "category": "other",
+  "description": "Salon operations on Chatfuel: bookings, clients, a knowledge base, and Comment Studio — Instagram comments with buying intent get a fixed public reply and a Direct with the salon’s prices, in Spanish, English or Portuguese. Scaffolded into your own repository with a build plan.",
+  "category": "instagram",
   "status": "draft",
   "minWizardVersion": "0.4.0",
   "modules": [
