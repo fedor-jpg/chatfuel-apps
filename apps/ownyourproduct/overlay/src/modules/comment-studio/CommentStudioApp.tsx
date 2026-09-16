@@ -22,6 +22,7 @@ import {
   Switch,
   Tag,
   Textarea,
+  ToastProvider,
   useToast,
 } from "~ui";
 import { nestedErrorCodes } from "~api";
@@ -110,7 +111,7 @@ function describeError(err: unknown, t: ScreenCopy): string {
   return codes.length ? `${message} (${codes.join(", ")})` : message;
 }
 
-export function CommentStudioApp({ botId, client, navigate }: ModuleAppProps) {
+function CommentStudioBody({ botId, client, navigate }: ModuleAppProps) {
   const language = useAppLanguage();
   const t = copy(SCREEN, language);
   const toast = useToast();
@@ -276,7 +277,7 @@ export function CommentStudioApp({ botId, client, navigate }: ModuleAppProps) {
             : null;
 
   return (
-    <ModuleRoot>
+    <>
       <PageHeader
         title={t.title}
         meta={<Tag tone={statusTone}>{status ? t.status[status] : t.status.loading}</Tag>}
@@ -462,6 +463,23 @@ export function CommentStudioApp({ botId, client, navigate }: ModuleAppProps) {
           ) : null}
         </div>
       </PageBody>
+    </>
+  );
+}
+
+
+/**
+ * The module's root: the frame and the providers, and nothing else. `useToast`
+ * is called in the body, which is a CHILD of the provider — a hook of its own
+ * that consumed it here would run while the provider is still just a return
+ * value, and the module would white-screen on its first render.
+ */
+export function CommentStudioApp(props: ModuleAppProps) {
+  return (
+    <ModuleRoot>
+      <ToastProvider>
+        <CommentStudioBody {...props} />
+      </ToastProvider>
     </ModuleRoot>
   );
 }

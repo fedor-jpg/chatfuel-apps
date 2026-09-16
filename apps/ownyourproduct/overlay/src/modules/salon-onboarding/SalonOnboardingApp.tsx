@@ -1,5 +1,5 @@
 /**
- * Preparar: a salon set up in one sitting. Business, specialities, services
+* Set-up: a salon set up in one sitting. Business, specialities, services
  * with anchored prices, hours, review — then one save that writes the
  * Knowledge Base and Bookings through ~api. The logic, the presets and the
  * copy are the product's own files; only the screen and the writes are new.
@@ -18,6 +18,7 @@ import {
   Spinner,
   Switch,
   Tag,
+  ToastProvider,
   useToast,
 } from "~ui";
 import type { ModuleAppProps } from "../types";
@@ -57,7 +58,7 @@ function stepOfIssue(issues: SetupIssue[], step: SetupStep): SetupIssue[] {
   return issues.filter((issue) => issue.step === step);
 }
 
-export function SalonOnboardingApp({ botId, client, navigate }: ModuleAppProps) {
+function SalonOnboardingBody({ botId, client, navigate }: ModuleAppProps) {
   const language = useAppLanguage();
   const t = copy(PREPARE_COPY, language) as Copy;
   const toast = useToast();
@@ -219,7 +220,7 @@ export function SalonOnboardingApp({ botId, client, navigate }: ModuleAppProps) 
 
   if (state.published && report) {
     return (
-      <ModuleRoot>
+      <>
         {header}
         <PageBody>
           <div className="flex flex-col gap-4" style={{ maxWidth: "44rem" }}>
@@ -233,12 +234,12 @@ export function SalonOnboardingApp({ botId, client, navigate }: ModuleAppProps) 
             </div>
           </div>
         </PageBody>
-      </ModuleRoot>
+      </>
     );
   }
 
   return (
-    <ModuleRoot>
+    <>
       {header}
       <PageBody>
         <div className="flex flex-col gap-4" style={{ maxWidth: "44rem" }}>
@@ -410,6 +411,23 @@ export function SalonOnboardingApp({ botId, client, navigate }: ModuleAppProps) 
           </div>
         </div>
       </PageBody>
+    </>
+  );
+}
+
+
+/**
+ * The module's root: the frame and the providers, and nothing else. `useToast`
+ * is called in the body, which is a CHILD of the provider — a hook of its own
+ * that consumed it here would run while the provider is still just a return
+ * value, and the module would white-screen on its first render.
+ */
+export function SalonOnboardingApp(props: ModuleAppProps) {
+  return (
+    <ModuleRoot>
+      <ToastProvider>
+        <SalonOnboardingBody {...props} />
+      </ToastProvider>
     </ModuleRoot>
   );
 }

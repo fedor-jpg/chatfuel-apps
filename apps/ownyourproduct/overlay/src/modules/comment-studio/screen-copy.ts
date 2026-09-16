@@ -34,7 +34,7 @@ const es = {
     description: "Dónde escucha los comentarios.",
     all: "Todas las publicaciones.",
     selectedHint: (n: number) => (n === 1 ? "Solo 1 publicación elegida." : `Solo ${n} publicaciones elegidas.`),
-    pick: "Para elegir publicaciones concretas, abre la regla “AgendaConmigo · preguntas de precio y hora” en Automatizaciones.",
+    pick: "Para elegir publicaciones concretas, abre la regla “Comment Studio · preguntas de precio y hora” en Automatizaciones.",
     open: "Abrir Automatizaciones",
   },
   keywords: {
@@ -121,7 +121,7 @@ export const SCREEN = defineCopy<ScreenCopy>("comment-studio.screen", {
       description: "Where it listens for comments.",
       all: "All posts.",
       selectedHint: (n: number) => (n === 1 ? "Only 1 post chosen." : `Only ${n} posts chosen.`),
-      pick: "To pick specific posts, open the rule “AgendaConmigo · preguntas de precio y hora” in Automations.",
+      pick: "To pick specific posts, open the rule “Comment Studio · preguntas de precio y hora” in Automations.",
       open: "Open Automations",
     },
     keywords: {
@@ -197,7 +197,7 @@ export const SCREEN = defineCopy<ScreenCopy>("comment-studio.screen", {
       description: "Onde ele escuta os comentários.",
       all: "Todas as publicações.",
       selectedHint: (n: number) => (n === 1 ? "Só 1 publicação escolhida." : `Só ${n} publicações escolhidas.`),
-      pick: "Para escolher publicações específicas, abra a regra “AgendaConmigo · preguntas de precio y hora” em Automações.",
+      pick: "Para escolher publicações específicas, abra a regra “Comment Studio · preguntas de precio y hora” em Automações.",
       open: "Abrir Automações",
     },
     keywords: {

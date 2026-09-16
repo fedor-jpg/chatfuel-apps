@@ -191,7 +191,7 @@ export function renderMail(template, locale, data = {}) {
   if (!MAIL_TEMPLATES.includes(template)) throw new Error(`Unknown mail template: ${template}`);
   const t = COPY[mailLocale(locale)];
   const copy = t[template];
-  const brand = String(data.brand ?? "AgendaConmigo").trim() || "AgendaConmigo";
+  const brand = String(data.brand ?? "OwnYourProduct").trim() || "OwnYourProduct";
   const roleLabel = copy.roles ? copy.roles[data.role] ?? copy.roles.specialist : "";
   const fields = {
     ...data,

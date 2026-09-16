@@ -1,11 +1,11 @@
 /**
- * Dinero: what the salon earned, spent and bought, by period. Earnings come
+* Money: what the salon earned, spent and bought, by period. Earnings come
  * from Bookings in Chatfuel (service prices of bookings that were not
  * cancelled); expenses and supply purchases are the app's own two tables
  * (0030_money.sql), managers only. Nothing here changes a booking.
  */
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { Alert, Button, Card, Input, ModuleRoot, PageBody, PageHeader, SegmentedControl, Select, Spinner, useToast } from "~ui";
+import { Alert, Button, Card, Input, ModuleRoot, PageBody, PageHeader, SegmentedControl, Select, Spinner, ToastProvider, useToast } from "~ui";
 import { BookingConfigDocument, BookingsRangeDocument } from "~api/generated/bookings/graphql";
 import { AuthContext } from "../auth/AuthContext";
 import type { ModuleAppProps } from "../types";
@@ -30,7 +30,7 @@ const describe = (err: unknown): string => {
   return e?.hint ? `${msg} (${e.hint})` : msg;
 };
 
-export function MoneyApp({ botId, client, view, setView }: ModuleAppProps) {
+function MoneyBody({ botId, client, view, setView }: ModuleAppProps) {
   const language = useAppLanguage();
   const t = copy(MONEY_COPY, language);
   const toast = useToast();
@@ -135,11 +135,11 @@ export function MoneyApp({ botId, client, view, setView }: ModuleAppProps) {
     />
   );
 
-  if (!auth || !signedIn) return (<ModuleRoot>{header}<PageBody><Alert tone="info">{t.signIn}</Alert></PageBody></ModuleRoot>);
-  if (!isManager) return (<ModuleRoot>{header}<PageBody><Alert tone="info">{t.managersOnly}</Alert></PageBody></ModuleRoot>);
+  if (!auth || !signedIn) return (<>{header}<PageBody><Alert tone="info">{t.signIn}</Alert></PageBody></>);
+  if (!isManager) return (<>{header}<PageBody><Alert tone="info">{t.managersOnly}</Alert></PageBody></>);
 
   return (
-    <ModuleRoot>
+    <>
       {header}
       <PageBody>
         <div className="flex flex-col gap-4" style={{ maxWidth: "52rem" }}>
@@ -203,6 +203,23 @@ export function MoneyApp({ botId, client, view, setView }: ModuleAppProps) {
           ) : null}
         </div>
       </PageBody>
+    </>
+  );
+}
+
+
+/**
+ * The module's root: the frame and the providers, and nothing else. `useToast`
+ * is called in the body, which is a CHILD of the provider — a hook of its own
+ * that consumed it here would run while the provider is still just a return
+ * value, and the module would white-screen on its first render.
+ */
+export function MoneyApp(props: ModuleAppProps) {
+  return (
+    <ModuleRoot>
+      <ToastProvider>
+        <MoneyBody {...props} />
+      </ToastProvider>
     </ModuleRoot>
   );
 }

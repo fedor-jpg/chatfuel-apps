@@ -1,11 +1,11 @@
 /**
- * Equipo: who has access and at what level. A manager runs the whole salon; a
+* Team: who has access and at what level. A manager runs the whole salon; a
  * specialist sees only her own calendar. The levels live in the auth schema
  * (0019_staff_access.sql, an app migration over the wizard's auth module);
  * the calendars come from Bookings; the auth module's adapter signs the calls.
  */
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { Alert, Button, Card, Input, ModuleRoot, PageBody, PageHeader, Select, Spinner, Tag, useToast } from "~ui";
+import { Alert, Button, Card, Input, ModuleRoot, PageBody, PageHeader, Select, Spinner, Tag, ToastProvider, useToast } from "~ui";
 import { BookingSpecialistsDocument } from "~api/generated/bookings/graphql";
 import { AuthContext } from "../auth/AuthContext";
 import { inviteUrl } from "../auth/lib/authRoutes";
@@ -37,7 +37,7 @@ const describe = (err: unknown): string => {
   return e.hint ? `${msg} (${e.hint})` : msg;
 };
 
-export function EquipoApp({ botId, client }: ModuleAppProps) {
+function EquipoBody({ botId, client }: ModuleAppProps) {
   const language = useAppLanguage();
   const t = copy(EQUIPO_COPY, language);
   const x = EXTRA[language] ?? EXTRA.es;
@@ -123,14 +123,14 @@ export function EquipoApp({ botId, client }: ModuleAppProps) {
   const inviteOptions = freeSpecialists(specialists, rows, invites);
 
   if (!auth || !signedIn) {
-    return (<ModuleRoot><PageHeader title={t.title} /><PageBody><Alert tone="info">{x.signIn}</Alert></PageBody></ModuleRoot>);
+    return (<><PageHeader title={t.title} /><PageBody><Alert tone="info">{x.signIn}</Alert></PageBody></>);
   }
   if (!isManager) {
-    return (<ModuleRoot><PageHeader title={t.title} /><PageBody><Alert tone="info">{t.managersOnly}</Alert></PageBody></ModuleRoot>);
+    return (<><PageHeader title={t.title} /><PageBody><Alert tone="info">{t.managersOnly}</Alert></PageBody></>);
   }
 
   return (
-    <ModuleRoot>
+    <>
       <PageHeader title={t.title} actions={<Button size="sm" variant="ghost" onClick={refetch}>{x.refresh}</Button>} />
       <PageBody>
         <div className="flex flex-col gap-4" style={{ maxWidth: "48rem" }}>
@@ -221,6 +221,23 @@ export function EquipoApp({ botId, client }: ModuleAppProps) {
           </Card>
         </div>
       </PageBody>
+    </>
+  );
+}
+
+
+/**
+ * The module's root: the frame and the providers, and nothing else. `useToast`
+ * is called in the body, which is a CHILD of the provider — a hook of its own
+ * that consumed it here would run while the provider is still just a return
+ * value, and the module would white-screen on its first render.
+ */
+export function EquipoApp(props: ModuleAppProps) {
+  return (
+    <ModuleRoot>
+      <ToastProvider>
+        <EquipoBody {...props} />
+      </ToastProvider>
     </ModuleRoot>
   );
 }

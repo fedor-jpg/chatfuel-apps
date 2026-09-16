@@ -32,7 +32,7 @@ export const ALL_SCOPES = [...COMMENT_SCOPES, ...DM_SCOPES, "InstagramStoryRepli
  * by name and reused, never re-created: a scope holds at most 30 customs and
  * toggling this on and off must not eat that budget.
  */
-export const KEYWORD_RULE_NAME = "AgendaConmigo · preguntas de precio y hora";
+export const KEYWORD_RULE_NAME = "Comment Studio · preguntas de precio y hora";
 
 function enabledOf(a: FuelyAutomation | null | undefined): boolean {
   return a?.enabled === true;

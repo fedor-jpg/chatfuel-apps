@@ -1,5 +1,5 @@
 /**
- * One e-mail: the invitation a manager sends from Equipo. The mailer, the
+ * One e-mail: the invitation a manager sends from Team. The mailer, the
  * templates (es / en / pt) and the per-address brake are the product's own
  * files next to this one; this is the seam the server mounts.
  *

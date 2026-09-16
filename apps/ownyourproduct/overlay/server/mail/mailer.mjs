@@ -11,7 +11,7 @@
  *   AGENDA_MAIL_PROVIDER   resend | log | supabase   (default: resend when a
  *                          key is present, otherwise supabase = unchanged)
  *   RESEND_API_KEY         the provider key
- *   AGENDA_MAIL_FROM       sender, e.g. "AgendaConmigo <hola@mail.example.com>"
+ *   AGENDA_MAIL_FROM       sender, e.g. "OwnYourProduct <hola@mail.example.com>"
  *                          — its domain must be verified at the provider
  *   AGENDA_MAIL_REPLY_TO   optional reply-to address
  *   AGENDA_MAIL_BRAND      optional product name in the emails
@@ -39,7 +39,7 @@ export function mailerConfigFromEnv(env = process.env) {
   const apiKey = String(env.RESEND_API_KEY ?? "").trim();
   const from = String(env.AGENDA_MAIL_FROM ?? "").trim();
   const replyTo = String(env.AGENDA_MAIL_REPLY_TO ?? "").trim();
-  const brand = String(env.AGENDA_MAIL_BRAND ?? "").trim() || "AgendaConmigo";
+  const brand = String(env.AGENDA_MAIL_BRAND ?? "").trim() || "OwnYourProduct";
   const requested = String(env.AGENDA_MAIL_PROVIDER ?? "").trim().toLowerCase();
   const problems = [];
   let provider = requested || (apiKey ? "resend" : "supabase");

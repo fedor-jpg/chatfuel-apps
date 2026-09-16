@@ -4,7 +4,7 @@ import type { ModuleDescriptor } from "../types";
 
 export const moduleDescriptor: ModuleDescriptor = {
   id: "equipo",
-  title: "Equipo",
+  title: "Team",
   icon: <IconUsers />,
   Component: lazy(() => import("./EquipoApp").then((m) => ({ default: m.EquipoApp }))),
 };
