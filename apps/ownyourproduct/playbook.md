@@ -115,7 +115,26 @@ Direct, link-in-bio and story sources are off; back in Comment Studio the tag
 reads "Activo". Comment "precio?" on a post from another account: the public
 reply lands under the comment and the Direct arrives.
 
-## 7. Sign-up lands in Preparar
+## 7. Mail: recovery through Supabase, invitations through Resend
+
+Sign-in, verification and recovery e-mails are the auth module's and come from
+Supabase Auth; point its SMTP at Resend in the Supabase dashboard (Auth →
+SMTP settings) so they carry the salon's sender instead of Supabase's.
+
+The invitation a manager sends from Equipo is the one mail the app sends
+itself. The overlay ships `server/mail/` (the mailer, the es/en/pt templates,
+the per-address brake and `staff-invite.mjs`, the seam). Mount a route
+`POST /api/mail/staff-invite` behind the auth gate: it reads the caller's
+tenant, builds the link from the invite token on the server (never from the
+body), and calls `createStaffInviteMailer().send(...)`. Set `RESEND_API_KEY`
+and `AGENDA_MAIL_FROM` server-side; without them the mailer logs and Equipo
+keeps showing the link to copy.
+
+Verify: `npx vitest run server/mail` passes; with the route mounted and the
+key set, an invitation from Equipo arrives in the mailbox with the salon's
+name and a link that opens the app's invite page.
+
+## 8. Sign-up lands in Preparar
 
 A new salon that signs up through the auth module gets its bot from the
 wizard's sign-up flow and is sent to `/`, which step 1 made Preparar. Keep it
