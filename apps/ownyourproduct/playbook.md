@@ -7,8 +7,8 @@ and a fixed Direct carrying the salon's prices (no AI, no usage cost). The
 salon's own modules (Bookings, Contacts, Knowledge Base, Automations, Channels,
 Auth, Admin) are the wizard's; the overlay adds `src/modules/salon-onboarding/`
 (Preparar, the one-sitting setup), `src/modules/comment-studio/` and
-`src/modules/equipo/` (team levels), plus one app migration under
-`supabase/app-migrations/`.
+`src/modules/equipo/` (team levels) and `src/modules/money/` (Dinero), plus
+two app migrations under `supabase/app-migrations/`.
 
 Every user-facing string of Comment Studio lives in
 `src/modules/comment-studio/screen-copy.ts` (Spanish, English, Portuguese);
@@ -115,7 +115,24 @@ Direct, link-in-bio and story sources are off; back in Comment Studio the tag
 reads "Activo". Comment "precio?" on a post from another account: the public
 reply lands under the comment and the Direct arrives.
 
-## 7. Mail: recovery through Supabase, invitations through Resend
+## 7. Money: apply the app migration and register Dinero
+
+The overlay ships `supabase/app-migrations/0030_money.sql`: two tables next
+to the auth schema, expenses and supply purchases, readable and writable by
+the salon's managers only (row-level security through `cf_members`), never
+deleted, only marked. Earnings are not stored: the Money screen reads
+Bookings through the API and bills the service price of every booking that
+was not cancelled or missed. Apply the migration after 0019, then import
+`moduleDescriptor as money` from `./money` into `MODULES` and add `'money'`
+to the `crm` group after `'equipo'`.
+
+Verify: `/money` shows the overview for "Mes actual" with revenue that
+matches the sum of the non-cancelled bookings' service prices in Bookings for
+the same month; an expense added on the "Gastos" tab lowers "Ganancia neta"
+by its amount and appears in the CSV download; a specialist signed in sees
+only the "managers only" notice.
+
+## 8. Mail: recovery through Supabase, invitations through Resend
 
 Sign-in, verification and recovery e-mails are the auth module's and come from
 Supabase Auth; point its SMTP at Resend in the Supabase dashboard (Auth →
@@ -134,7 +151,7 @@ Verify: `npx vitest run server/mail` passes; with the route mounted and the
 key set, an invitation from Equipo arrives in the mailbox with the salon's
 name and a link that opens the app's invite page.
 
-## 8. Sign-up lands in Preparar
+## 9. Sign-up lands in Preparar
 
 A new salon that signs up through the auth module gets its bot from the
 wizard's sign-up flow and is sent to `/`, which step 1 made Preparar. Keep it
@@ -153,6 +170,7 @@ negocio".
   and never overwrites that choice.
 - No ads, no WhatsApp, no marketplace: Instagram ad comments belong to a
   separate Ads app and are never touched here.
-- No extra server routes: the salon's data is the Knowledge Base's and
-  Bookings' own. The one app migration only adds staff levels to the auth
-  schema; money, records and the operator lifecycle come in a later version.
+- No extra server routes: bookings, clients and the knowledge base are the
+  toolkit's own. The two app migrations add staff levels and the salon's
+  spending next to the auth schema; the product's records store and the
+  operator lifecycle (deleting a salon safely) are not part of this app.
