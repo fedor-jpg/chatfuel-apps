@@ -6,7 +6,9 @@ answers every Instagram comment with buying intent with a fixed public reply
 and a fixed Direct carrying the salon's prices (no AI, no usage cost). The
 salon's own modules (Bookings, Contacts, Knowledge Base, Automations, Channels,
 Auth, Admin) are the wizard's; the overlay adds `src/modules/salon-onboarding/`
-(Preparar, the one-sitting setup) and `src/modules/comment-studio/`.
+(Preparar, the one-sitting setup), `src/modules/comment-studio/` and
+`src/modules/equipo/` (team levels), plus one app migration under
+`supabase/app-migrations/`.
 
 Every user-facing string of Comment Studio lives in
 `src/modules/comment-studio/screen-copy.ts` (Spanish, English, Portuguese);
@@ -65,7 +67,41 @@ hours and a cancellation rule in the additional instructions; Bookings settings
 show appointment confirmation switched on. Pressing "Guardar y empezar" again
 creates nothing twice.
 
-## 4. Connect Instagram and turn Comment Studio on
+## 4. Team levels: apply the app migration and register Equipo
+
+The overlay ships `supabase/app-migrations/0019_staff_access.sql`: two levels
+of staff access on the auth module's own tables. A Manager is an admin; a
+Specialist is a member linked to exactly one Bookings specialist. Apply it to
+the app's Supabase project after the auth migrations (dashboard SQL editor, or
+`supabase db query -f supabase/app-migrations/0019_staff_access.sql` with the
+project linked). It replaces `cf_create_invite`, `cf_change_member_role`,
+`cf_list_members`, `cf_list_invites`, `cf_my_membership` and `cf_my_workspace`
+with supersets that keep every column and argument the auth module uses.
+
+Then register the module: import `moduleDescriptor as equipo` from
+`./equipo` into `MODULES` and add `'equipo'` to the `crm` group after
+`'bookings'`.
+
+Verify: `/equipo` lists the members with the owner tagged "Dueña", a manager
+can invite "ana@salon.cl" as a Specialist linked to a Bookings specialist and
+copy the invitation link, and the auth module's Team page still opens and
+still lists the same people.
+
+## 5. Specialists see only their own calendar
+
+`cf_my_workspace` now returns `specialist_id` for a member. In the bookings
+module, when the signed-in membership carries a `specialist_id`, preselect
+that specialist in the calendar and the appointments list and hide the
+specialist switcher (a small change in `BookingsApp`, the wizard's file: it is
+yours to edit). Server side, the proxy must refuse booking mutations for
+another specialist when the caller's membership is a specialist; the product's
+`server/chatfuel/staff-policy.mjs` in fedor-jpg/agendaconmigo is the reference
+for which fields to check.
+
+Verify: sign in as the invited specialist; the calendar opens on her column
+and the switcher is gone; a manager still sees every column.
+
+## 6. Connect Instagram and turn Comment Studio on
 
 Sign in, connect the salon's Instagram account in Channels, enter two or
 three services with prices in the Knowledge Base, then open Comment Studio:
@@ -79,7 +115,7 @@ Direct, link-in-bio and story sources are off; back in Comment Studio the tag
 reads "Activo". Comment "precio?" on a post from another account: the public
 reply lands under the comment and the Direct arrives.
 
-## 5. Sign-up lands in Preparar
+## 7. Sign-up lands in Preparar
 
 A new salon that signs up through the auth module gets its bot from the
 wizard's sign-up flow and is sent to `/`, which step 1 made Preparar. Keep it
@@ -98,5 +134,6 @@ negocio".
   and never overwrites that choice.
 - No ads, no WhatsApp, no marketplace: Instagram ad comments belong to a
   separate Ads app and are never touched here.
-- No extra server routes and no custom migrations in this version: the salon's
-  data is the Knowledge Base's and Bookings' own.
+- No extra server routes: the salon's data is the Knowledge Base's and
+  Bookings' own. The one app migration only adds staff levels to the auth
+  schema; money, records and the operator lifecycle come in a later version.
