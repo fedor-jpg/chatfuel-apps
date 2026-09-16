@@ -1,9 +1,9 @@
 {
   "$schema": "../../app.schema.json",
-  "id": "agendaconmigo",
-  "name": "AgendaConmigo",
-  "tagline": "A salon's whole day on Chatfuel: calendar, clients, Instagram comments answered — under your own name.",
-  "description": "Salon operations on Chatfuel: bookings, clients, a knowledge base, and Comment Studio — Instagram comments with buying intent get a fixed public reply and a Direct with the salon’s prices, in Spanish, English or Portuguese. Scaffolded into your own repository with a build plan.",
+  "id": "ownyourproduct",
+  "name": "OwnYourProduct",
+  "tagline": "A business you can sell under your own name: bookings, clients, Instagram comments answered. The salon playbook first.",
+  "description": "Own Your Product on Chatfuel: a booking calendar, clients, a knowledge base and Comment Studio, which answers Instagram comments with buying intent with a fixed public reply and a Direct with the prices, in Spanish, English or Portuguese. Scaffolded into your own repository with a build plan.",
   "category": "instagram",
   "status": "draft",
   "minWizardVersion": "0.4.0",
@@ -17,7 +17,7 @@
     "admin"
   ],
   "brand": {
-    "appName": "AgendaConmigo",
+    "appName": "OwnYourProduct",
     "logo": "listing/icon.png"
   },
   "playbook": "playbook.md",
@@ -30,6 +30,7 @@
       }
     ],
     "keywords": [
+      "ownyourproduct",
       "salon",
       "beauty",
       "bookings",

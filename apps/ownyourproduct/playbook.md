@@ -1,6 +1,6 @@
-# Build plan: AgendaConmigo
+# Build plan: OwnYourProduct, salon playbook
 
-The scaffold you are in is the AgendaConmigo preset: a beauty salon's day on
+The scaffold you are in is the OwnYourProduct preset in its salon playbook (AgendaConmigo): a beauty salon's day on
 Chatfuel — bookings, clients, a knowledge base, and Comment Studio, which
 answers every Instagram comment with buying intent with a fixed public reply
 and a fixed Direct carrying the salon's prices (no AI, no usage cost). The
