@@ -16,6 +16,9 @@
     "auth",
     "admin"
   ],
+  "npmDependencies": {
+    "libphonenumber-js": "^1.11.0"
+  },
   "brand": {
     "appName": "OwnYourProduct",
     "logo": "listing/icon.png"
